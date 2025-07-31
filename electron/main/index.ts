@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import os from 'node:os'
 import { update } from './update'
+import { echoController } from './features/echo/EchoController'
 
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -81,7 +82,7 @@ async function createWindow() {
   update(win)
 }
 
-app.whenReady().then(createWindow)
+
 
 app.on('window-all-closed', () => {
   win = null
@@ -119,5 +120,14 @@ ipcMain.handle('open-win', (_, arg) => {
     childWindow.loadURL(`${VITE_DEV_SERVER_URL}#${arg}`)
   } else {
     childWindow.loadFile(indexHtml, { hash: arg })
+  }
+})
+
+app.whenReady().then(() => createWindow()).then(() => {
+  if (win) {
+    // User-defined IPC controller
+    echoController.bindTargetWindow(win).start();
+    // Bind the main window to the realtime screen controller
+   
   }
 })

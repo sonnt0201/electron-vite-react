@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import UpdateElectron from '@/components/update'
 import logoVite from './assets/logo-vite.svg'
 import logoElectron from './assets/logo-electron.svg'
@@ -6,6 +6,17 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    window.ipcRenderer.echo("Hello from Renderer!").then((res) => {
+      console.log('Echo response:', res)
+    })
+
+    return () => {
+      window.ipcRenderer.removeAllListener();
+    }
+  },[])
+
   return (
     <div className='App'>
       <div className='logo-box'>

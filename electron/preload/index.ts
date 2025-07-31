@@ -1,27 +1,8 @@
 import { ipcRenderer, contextBridge } from 'electron'
-
-// --------- Expose some API to the Renderer process ---------
-contextBridge.exposeInMainWorld('ipcRenderer', {
-  on(...args: Parameters<typeof ipcRenderer.on>) {
-    const [channel, listener] = args
-    return ipcRenderer.on(channel, (event, ...args) => listener(event, ...args))
-  },
-  off(...args: Parameters<typeof ipcRenderer.off>) {
-    const [channel, ...omit] = args
-    return ipcRenderer.off(channel, ...omit)
-  },
-  send(...args: Parameters<typeof ipcRenderer.send>) {
-    const [channel, ...omit] = args
-    return ipcRenderer.send(channel, ...omit)
-  },
-  invoke(...args: Parameters<typeof ipcRenderer.invoke>) {
-    const [channel, ...omit] = args
-    return ipcRenderer.invoke(channel, ...omit)
-  },
-
-  // You can expose other APTs you need here.
-  // ...
-})
+/**
+ * 
+ * @file CAUTIOUS: This file is executed in the Renderer process.
+ */
 
 // --------- Preload scripts loading ---------
 function domReady(condition: DocumentReadyState[] = ['complete', 'interactive']) {
@@ -116,3 +97,28 @@ window.onmessage = (ev) => {
 }
 
 setTimeout(removeLoading, 4999)
+
+// --------- Expose some API to the Renderer process ---------
+contextBridge.exposeInMainWorld('ipcRenderer', {
+  on(...args: Parameters<typeof ipcRenderer.on>) {
+    const [channel, listener] = args
+    return ipcRenderer.on(channel, (event, ...args) => listener(event, ...args))
+  },
+  off(...args: Parameters<typeof ipcRenderer.off>) {
+    const [channel, ...omit] = args
+    return ipcRenderer.off(channel, ...omit)
+  },
+  send(...args: Parameters<typeof ipcRenderer.send>) {
+    const [channel, ...omit] = args
+    return ipcRenderer.send(channel, ...omit)
+  },
+  invoke(...args: Parameters<typeof ipcRenderer.invoke>) {
+    const [channel, ...omit] = args
+    return ipcRenderer.invoke(channel, ...omit)
+  },
+
+   // ================== USER-DEFINED APIs (CAUTIOUS: ALL THOSE CODES ARE PUT ON RENDERER-SIDE) ===================
+  removeAllListener: ()=> {ipcRenderer.removeAllListeners()},
+  echo: (message: string) => ipcRenderer.invoke('echo', message),
+  
+})
