@@ -3,7 +3,7 @@ import { IpcMainInvokeEvent, IpcMainEvent } from "electron";
 import { IPCControllerBaseV2 } from "../../cores/IPCControllerBaseV2";
 import { MainLogger } from "../../cores/MainLog";
 import { IMainLogger } from "../../cores/IMainLog";
-
+import { globalAppDatabase } from "../../database/AppDatabase";
 /**
  * Echo controller for testing purpose
  */
@@ -17,6 +17,8 @@ class EchoController extends IPCControllerBaseV2<string, string> {
        
         this._message = "";
         // this.handle = this.handle.bind(this);
+
+        globalAppDatabase.getConnection(); // Ensure the database connection is established
     }
 
     channel(): string {
