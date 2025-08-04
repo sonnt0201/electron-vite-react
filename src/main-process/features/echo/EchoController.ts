@@ -1,9 +1,13 @@
 import { IPCControllerBase } from "../../cores/IPCControllerBase";
-import { IpcMainInvokeEvent, IpcMainEvent } from "electron";
+
 import { IPCControllerBaseV2 } from "../../cores/IPCControllerBaseV2";
-import { MainLogger } from "../../cores/MainLog";
+
 import { IMainLogger } from "../../cores/IMainLog";
-import { globalAppDatabase } from "../../database/AppDatabase";
+
+
+import { IpcMainInvokeEvent, IpcMainEvent } from "electron";
+import { MainLogger } from "@/main-process/cores/MainLog";
+import { globalAppDatabase } from "@/main-process/database/AppDatabase";
 /**
  * Echo controller for testing purpose
  */
